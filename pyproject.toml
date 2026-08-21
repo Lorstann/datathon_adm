@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grid-up-datathon"
+version = "0.1.0"
+description = "Trafo bazli gunluk elektrik tuketimi tahmini (GDZ/ADM Grid Up Datathon)"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["src", "src.data", "src.features", "src.validation", "src.models", "src.audit"]

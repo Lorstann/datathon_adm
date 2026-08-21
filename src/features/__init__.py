@@ -1,0 +1,1 @@
+"""Ozellik uretim modulleri."""
