@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Veri: yarisma verisi paylasilamaz (yarisma kurallari), turevler de repoda tutulmaz
+data/raw/
+data/interim/
+data/processed/
+data/external/
+submissions/
+models/
+reports/figures/
+
+*.parquet
+*.feather
+*.pkl
+*.joblib
+*.zip

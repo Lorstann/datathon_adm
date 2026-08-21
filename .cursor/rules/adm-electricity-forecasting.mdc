@@ -1,0 +1,68 @@
+---
+description: ADM electricity panel/time-series forecasting — leakage, validation, baselines, experiment tracking
+alwaysApply: true
+---
+
+# ADM Electricity Forecasting Rules
+
+This project is a panel/time-series forecasting competition.
+
+Primary objective:
+Forecast Active Consumption for Apr 2026 - Jul 2026 using data available
+up to Mar 2026.
+
+## Non-negotiable rules
+
+1. Never use random `train_test_split` for model validation.
+
+2. Validation must preserve chronological order.
+
+3. Prefer rolling-origin / expanding-window validation.
+
+4. No feature may use information from timestamps later than the prediction timestamp.
+
+5. For lag and rolling features:
+   always group by the correct transformer/entity identifier
+   before shift/rolling operations.
+
+6. Every feature must pass a leakage audit.
+
+7. Establish naive baselines before advanced models:
+   - previous period
+   - previous week/month when applicable
+   - seasonal naive
+   - group historical mean
+
+8. Always compare advanced models against naive baselines.
+
+9. Treat this as panel forecasting:
+   multiple transformers/entities observed through time.
+
+10. Investigate:
+    - transformer-level behavior
+    - location effects
+    - transformer power
+    - seasonality
+    - weekday/weekend
+    - official holidays
+    - special days
+    - weather effects
+
+11. External data must be reproducible and documented.
+
+12. Weather features must correspond to information legitimately available
+    for the forecast horizon according to competition rules.
+
+13. Do not select models solely from Kaggle leaderboard scores.
+    Prefer robust local validation.
+
+14. Track every experiment:
+    model
+    features
+    validation window
+    metric
+    score
+    seed
+    notes
+
+15. Never overwrite raw data.

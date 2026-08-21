@@ -1,0 +1,12 @@
+{
+  "plugins": {
+    "superpowers": {
+      "enabled": true
+    },
+    "science-superpowers-dev/science-superpowers": {
+      "enabled": true,
+      "gitUrl": "https://github.com/K-Dense-AI/science-superpowers",
+      "gitRef": "main"
+    }
+  }
+}
