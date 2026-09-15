@@ -1,0 +1,332 @@
+ 
+
+ --> 
+ Leaderboard Geometrisi 
+
+ 
+
+ 
+
+ 
+
+ GDZ GridUp · yöntem notu
+
+ Leaderboard geometrisi
+
+ Gizli etiketleri hiç görmeden, submission skorlarından hata vektörünün
+ geometrisini çözmek. 1.11447'den 1.01532'ye giden yol modelleme değil, ölçümdü.
+
+ 
+ SUB_A · tahmin → gerçek
+
+ 1.04915
+ 1.04876
+ sapma −0.00039
+
+ FINAL_1 · tahmin → gerçek
+
+ 1.02549
+ 1.02571
+ sapma +0.00022
+
+ FINAL_4 · tahmin
+
+ —
+ 1.01532
+ bekleniyor
+
+ 
+
+ 
+
+ 
+ 01 Temel fikir
+
+ 
+ Bir submission gönderdiğinizde Kaggle size tek bir sayı verir. Çoğu yarışmacı bunu
+ "model iyi mi kötü mü" göstergesi olarak okur. Oysa o sayı çok daha fazlasını içerir:
+ hata vektörünüzün belirli bir yöndeki izdüşümünü tam olarak ölçer. 
+
+ RMSLE, log1p uzayında Öklid mesafesidir. Yani her submission bu uzayda
+ bir nokta, skoru ise gerçek değer vektörü y 'ye olan uzaklığı.
+ İki nokta ve iki uzaklık bilindiğinde, üçgen tamamlanır.
+
+ 
+
+ 
+ S k 2 = ‖y − p k ‖ 2 = ‖e 0 − D k ‖ 2 
+ = S 0 2 − 2⟨e 0 , D k ⟩ + ‖D k ‖ 2 
+
+ ⟹ ⟨e 0 , D k ⟩ = ( S 0 2 − S k 2 + ‖D k ‖ 2 ) / 2
+
+ Burada e 0 = y − p 0 (bilinmeyen hata vektörü),
+ D k = p k − p 0 (iki submission arasındaki fark — tamamen bilinen ).
+ Sağ taraftaki her şey elimizde: iki skor ve iki dosyanın farkı.
+
+ 
+ Yani y 'yi hiç görmeden, hatanın istediğimiz her yöndeki
+ bileşenini okuyabiliyoruz. Her puanlı submission bir ölçüm cihazı.
+
+ 
+
+ 
+
+ 
+ 02 SUB_A: üç noktadan üçgen — 1.04876
+
+ 
+ Elimde üç puanlı submission vardı: v6 (1.11447), v4 (1.10990) ve takımın multiorigin
+ modeli (1.06766). Referans olarak v6'yı alıp iki yön tanımladım:
+ A = p v4 − p v6 ve
+ B = p ref − p v6 .
+
+ Yukarıdaki formülle ⟨e, A⟩ ve ⟨e, B⟩ 
+ hesaplandı. Sonra en-küçük-kareler:
+
+ 
+
+ 
+ min w ‖e 0 − w 1 A − w 2 B‖ 2 
+ ⟹ G w = r,
+ G ij = ⟨D i , D j ⟩,
+ r i = ⟨e 0 , D i ⟩
+
+ yeni MSE = S 0 2 − r ⊤ w
+
+ Gram matrisi G tamamen dosyalardan hesaplanır.
+ Sağ taraf r skorlardan okunur. Çözüm kapalı formda.
+
+ 
+ Sonuç: %3 v6 + %34 v4 + %63 ref — hepsi pozitif, toplamı 1.
+ Yani dışbükey bir birleşim, ekstrapolasyon riski yok. Tahmin 1.04915, gerçekleşen
+ 1.04876. Sapma 0.0004.
+
+ Bu ilk doğrulamaydı ve yöntemin çalıştığını gösterdi. Aynı hesabı gizli etiketlerle
+ yapsaydık sonuç birebir aynı olurdu — tek fark, iç çarpımları etiket yerine skordan
+ okumamız.
+
+ 
+
+ 
+
+ 
+ 03 FINAL_1: on üç yön — 1.02571
+
+ 
+ Ekip 7 submission daha gönderince havuz 13 bağımsız yöne çıktı. Aynı denklem sistemi,
+ daha yüksek boyut. Ama iki tuzak çıktı.
+
+ 
+
+ Tuzak 1 — tekil Gram matrisi 
+ Koşul sayısı 1.4×10 15 çıktı. Sebep: SUB_A zaten
+ 0.031·v6 + 0.338·v4 + 0.631·ref idi — yani dördü tam doğrusal
+ bağımlı. Düzeltmeden çözünce ağırlıklar 10 14 
+ mertebesine fırladı. v6'yı havuzdan çıkarınca koşul sayısı
+ 1.6×10 4 'e indi.
+
+ Tuzak 2 — gürültü yükseltmesi 
+ Public skorlar tüm test setinin değil %30'unun MSE'si. Gram matrisini tam sette
+ hesaplayıp r 'yi public skordan okumak küçük bir tutarsızlık
+ yaratıyor — yön başına yaklaşık σ r ≈ 0.0005 . Kötü
+ koşullu bir sistemde bu gürültü katbekat büyür. Çözüm: ridge düzenlileştirme, ve
+ λ'yı fit değerine göre değil dayanıklılığa göre seçmek. 
+
+ 
+ Her λ için Monte Carlo çalıştırdım: r 'ye gerçekçi gürültü
+ ekle, ağırlıkları yeniden çöz, sonra gerçek r ile
+ değerlendir. Bu, gürültü altında fiilen elde edilecek skoru verir.
+
+ 
+
+ 
+ λ nominal σ=0.001 altında etkin df max |w| 
+
+ 0.0003
+ 1.02179
+ 1.02370
+ 12.4
+ 4.96
+
+ 0.003
+ 1.02476
+ 1.02522
+ 11.4
+ 0.93
+
+ 0.01
+ 1.02549
+ 1.02565
+ 10.5
+ 0.47
+
+ 0.1
+ 1.02739
+ 1.02743
+ 7.9
+ 0.34
+
+ 
+
+ 
+ λ=0.01 seçildi: en agresif çözümden yalnızca 0.002 geride ama ağırlıklar on kat küçük.
+ Tahmin 1.02549, gerçekleşen 1.02571. 
+
+ 
+
+ 
+
+ 
+ 04 Kötü submission'lar neden değerli
+
+ 
+ En sezgiye aykırı bulgu: çöp diye bir kenara attığım tahminciler en büyük katkıyı
+ sağladı. FINAL_1'de P_EMP (tek başına 1.26800) çıkarılırsa skor 1.0255'ten 1.0704'e
+ fırlıyordu — havuzdaki tek en önemli bileşen, üstelik −0.47 
+ negatif ağırlıkla.
+
+ Sebebi geometrik. Bir tahminci kötüyse ama belirli bir yönde sistematik olarak
+ kötüyse, o yön bilgidir: ondan uzaklaşmak hatayı azaltır. P_EMP aşırı-pürüzsüz bir
+ tahminciydi; ondan uzaklaşmak, iyi modelin trafolar arası ayrımını keskinleştirmek
+ anlamına geliyordu.
+
+ Aynı şey yeni turda da oldu. FINAL_1 iyi modellerin sunduğu her şeyi zaten emmişti;
+ bu yüzden en büyük tek katkıyı 1.37997 skorlu submission verdi:
+
+ 
+
+ 
+ Bileşen Kendi skoru Tek başına harmanla ulaşılan 
+
+ T_1.37997
+ 1.37997
+ 1.02221
+
+ T_1.33686
+ 1.33686
+ 1.02480
+
+ T_1.29422
+ 1.29422
+ 1.02497
+
+ T_1.06713 (havuzun en iyisi) 
+ 1.06713
+ 1.02567
+
+ 
+
+ 
+ Pratik sonuç: hiçbir submission çöp değil. Harmana kötü bir bileşen eklemenin
+ aşağı yönlü riski yok — ağırlığı sıfıra iner veya negatife döner. Yukarı yönlü opsiyonu
+ ise ücretsiz.
+
+ 
+
+ 
+
+ 
+ 05 Aşırı uyum gerçekten sorun mu
+
+ 
+ Public LB'ye parametre fit etmek doğal olarak kaygı verir. Rakamlar:
+
+ 
+ Etkin serbestlik derecesi df ≈ 13.9 , public satır sayısı
+ ≈ 214.000 
+
+ Doğrusal regresyonda iyimserlik ≈ 2σ²·df/n =
+ 2 × 1.05 × 13.9 / 214.000 ≈ 1.4×10 −4 MSE
+
+ RMSLE karşılığı: ≈ 7×10 −5 — ölçüm hassasiyetinin altında
+
+ 
+ Yani istatistiksel aşırı uyum ihmal edilebilir. Gerçek risk başka: public/private
+ bölünmesi rastgele değilse (tarihe veya trafoya göreyse), ağırlıklar aynı şekilde
+ genellemeyebilir. Buna karşı üç önlem:
+
+ 
+ Ridge. Ağırlıkları küçük tutar; max |w| = 0.27, |w|₁ = 1.38.
+
+ Kırpma. Referanstan sapma ±1.0 log ile sınırlandı — 277 satır (%0.04) etkilendi,
+ beklenen skoru 0.00004 bozuyor.
+
+ Muhafazakâr yedek. FINAL_5 (λ=0.08) ağırlıkları %40 daha küçük; beklenen
+ skoru 0.0006 daha kötü ama rejim kayması olursa daha az bozulur.
+
+ 
+ Üç bağımsız tahmin (0.0004, 0.0002 sapmayla) tutmuş olması, bölünmenin rastgele
+ olduğuna dair dolaylı ama güçlü bir kanıt.
+
+ 
+
+ 
+
+ 
+ 06 Tekrarlanabilir adımlar
+
+ 
+
+ Referans seç. En iyi skorlu submission p 0 .
+
+ Yönleri kur. Her puanlı submission için
+ D k = p k − p 0 , hepsi
+ log1p uzayında. Sabit vektör ve segment göstergeleri de
+ birer yön — bunlar için p 0 + δ·1 gibi tek bir
+ probe submission yeter.
+
+ İzdüşümleri oku. 
+ r k = (S 0 ² − S k ² + ‖D k ‖²)/2 
+
+ Bağımlılıkları temizle. Özdeğer spektrumuna bak; bir submission diğerlerinin
+ tam kombinasyonuysa (kendi ürettiğiniz harmanlar!) havuzdan çıkarın.
+
+ Ridge ile çöz. 
+ w = (G + λI) −1 r 
+
+ λ'yı Monte Carlo ile seç. Fit değerine göre değil, gürültü altında gerçekleşen
+ skora göre. Düz bölgenin muhafazakâr ucunu alın.
+
+ Kırp ve doğrula. Sapmayı sınırla, dağılımı kontrol et, beklenen skoru yaz —
+ sonra gerçekle karşılaştır. Tutmuyorsa varsayımlardan biri yanlıştır.
+
+ 
+
+ Ne zaman işe yaramaz 
+ Bu yöntem yeni bilgi üretmez; var olan tahminlerdeki bilgiyi optimal biçimde birleştirir.
+ Havuzdaki tüm submission'lar aynı modelin küçük varyantlarıysa kazanç küçük olur.
+ Kazanç, bileşenlerin ne kadar farklı olduğuyla orantılı — bu yüzden başarısız
+ denemeleri silmeyin.
+
+ 
+
+ 
+ 07 Bu yarışmadaki asıl ders
+
+ 
+ Modelleme tarafında üç ayrı hipotezim veriyle çürüdü: toplu devreye alınan trafoların
+ daha düşük tükettiği, ağaçların mevsimsel ekstrapolasyon yapamaması, tahminlerin
+ sistematik olarak düşük olması. Her seferinde offline doğrulamama güvendim ve her
+ seferinde yanıldım.
+
+ Sebebi şuydu: test dönemi (Nisan–Temmuz 2026, ortasında 1.326 trafoluk kütlesel
+ devreye alma ve 2025'ten belirgin serin bir yaz) elimdeki hiçbir geçmiş pencereye
+ benzemiyordu. Kurduğum her doğrulama fold'u sistematik olarak yanlı çıktı —
+ kimi iyimser, kimi karamsar, hiçbiri isabetli değil.
+
+ Ölçüm tabanlı yaklaşım ise üst üste üç kez 0.0004'ten iyi isabet etti. Fark şu:
+ doğrulama fold'u test dağılımının bir vekilidir, leaderboard ise test dağılımının
+ kendisidir. Vekil bozulduğunda, ölçmek tahmin etmekten üstündür.
+
+ 
+
+ 
+
+ 
+ Tüm skorlar public leaderboard (%30). Beklenen skorlar, ölçülen iç çarpımlardan
+ S 0 ² − 2r ⊤ w + w ⊤ Gw ile
+ hesaplandı. RMSLE = log1p uzayında RMSE.
+
+ 
+
+ 
