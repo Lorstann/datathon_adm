@@ -22,3 +22,8 @@ reports/figures/
 *.pkl
 *.joblib
 *.zip
+
+# Egitim artefaktlari / gurutlu loglar
+catboost_info/
+reports/_*.log
+*.egg-info/
