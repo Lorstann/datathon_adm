@@ -9,4 +9,4 @@ description = "Trafo bazli gunluk elektrik tuketimi tahmini (GDZ/ADM Grid Up Dat
 requires-python = ">=3.11"
 
 [tool.setuptools]
-packages = ["src", "src.data", "src.features", "src.validation", "src.models", "src.audit"]
+packages = ["src", "src.data", "src.features", "src.validation", "src.models", "src.audit", "src.external"]
