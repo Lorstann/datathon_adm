@@ -1,0 +1,20 @@
+{
+  "summary": {
+    "cold_B_alone": {
+      "blend": 1.724280175400949,
+      "cold": 1.9551851520610957
+    },
+    "level_shape_C": {
+      "blend": 1.3359682308711969,
+      "cold": 1.8745682157418566
+    },
+    "router_CB": {
+      "blend": 1.3617519727677934,
+      "cold": 1.9551851520610957
+    }
+  },
+  "delta_blend": 0.02578374189659649,
+  "delta_cold": 0.08061693631923905,
+  "submit_ok": false,
+  "reason": "router blend 1.3618 (delta +0.0258), cold 1.9552 (delta +0.0806)"
+}

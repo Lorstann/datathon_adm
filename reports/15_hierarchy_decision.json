@@ -1,0 +1,37 @@
+{
+  "c_blend_ref": 1.3359,
+  "c_cold_ref": 1.8746,
+  "summary": {
+    "guc_month_z": {
+      "blend": 1.8555807893991583,
+      "cold": 1.8817982383677787
+    },
+    "guc_month_z_yoy": {
+      "blend": 1.8555807893991583,
+      "cold": 1.8817982383677787
+    },
+    "profile_kmeans": {
+      "blend": 1.372212539146819,
+      "cold": 1.8812634582626693
+    },
+    "td_guc_dow": {
+      "blend": 1.6979181431825172,
+      "cold": 1.9533678896023667
+    },
+    "td_guc_dow_yoy": {
+      "blend": 1.6979181431825172,
+      "cold": 1.9533678896023667
+    },
+    "td_ilce_guc_dow": {
+      "blend": 1.9667439644454472,
+      "cold": 2.4695085082410144
+    },
+    "td_ilce_guc_dow_yoy": {
+      "blend": 1.9667439644454472,
+      "cold": 2.4695085082410144
+    }
+  },
+  "go": false,
+  "best_method": null,
+  "path": "narrow_C"
+}
