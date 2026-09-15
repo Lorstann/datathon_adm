@@ -1,0 +1,20 @@
+{
+  "summary": {
+    "baseline": {
+      "blend": 1.3359384597952833,
+      "cold": 1.8745694852739392
+    },
+    "peer": {
+      "blend": 1.3582719412885471,
+      "cold": 1.9178606971271546
+    },
+    "peer_soft": {
+      "blend": 1.358254059526561,
+      "cold": 1.9178039779377614
+    }
+  },
+  "best_variant": "baseline",
+  "accept_patch": false,
+  "submit_ok": false,
+  "reason": "best=baseline blend_gain=+0.0000"
+}
