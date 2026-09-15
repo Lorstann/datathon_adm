@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "baseline_400": {
+      "blend": 1.3363769689600005,
+      "cold": 1.8746296358526162
+    },
+    "deep_leaves": {
+      "blend": 1.3371638271119057,
+      "cold": 1.8741467992867864
+    },
+    "seed_avg3_500": {
+      "blend": 1.336059458023023,
+      "cold": 1.8754315524476122
+    },
+    "seed_avg3_deep": {
+      "blend": 1.3363383212481503,
+      "cold": 1.8748664225514613
+    },
+    "trees_700": {
+      "blend": 1.3363021269793303,
+      "cold": 1.8755761212449293
+    }
+  },
+  "best": "seed_avg3_deep",
+  "submit_ok": true,
+  "submission": "C:\\Users\\musta\\OneDrive\\Masa\u00fcst\u00fc\\datathon-adm\\submissions\\submission_c_tuned.csv"
+}
