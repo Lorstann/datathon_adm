@@ -5,6 +5,9 @@ __pycache__/
 .venv/
 venv/
 
+# Yerel secret'lar (Bearer token vb.)
+.cursor/mcp.json
+
 # Veri: yarisma verisi paylasilamaz (yarisma kurallari), turevler de repoda tutulmaz
 data/raw/
 data/interim/
