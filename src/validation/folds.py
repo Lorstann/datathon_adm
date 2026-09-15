@@ -136,6 +136,7 @@ def cold_start_mask(
     profile: ColdProfile,
     *,
     seed: int = C.SEED,
+    n_target: int | None = None,
 ) -> pd.Index:
     """Maskelenecek trafolari tabakali ornekle secer.
 
@@ -148,7 +149,9 @@ def cold_start_mask(
     dagitilir; boylece toplam maskeleme orani korunur.
     """
     rng = np.random.default_rng(seed)
-    n_target = int(round(len(candidates) * profile.entity_rate))
+    if n_target is None:
+        n_target = int(round(len(candidates) * profile.entity_rate))
+    n_target = int(max(0, min(n_target, len(candidates))))
     if n_target == 0 or len(candidates) == 0:
         return pd.Index([], name=C.ENTITY)
 
