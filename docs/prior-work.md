@@ -387,3 +387,10 @@ Topluluk kaynağı: [gist.github.com/altinsoft](https://gist.github.com/altinsof
 **Üç açık uyarı.** (1) Gist **2013–2014 büyükşehir reorganizasyonundan önceye ait**: Manisa'nın merkez ilçesi **Yunusemre** ve **Şehzadeler** olarak bölündü, İzmir'in artık 30 ilçesi var. Eksikler: Menderes, Yunusemre, Şehzadeler ve birkaçı daha. GDZ'nin kendi materyalleri iki ilde **47 ilçe** diyor, dolayısıyla boşluk beklenmeli. (2) Birkaç kayıt il merkezinin kopyası (Buca ve Karşıyaka ikisi de 38,41885/27,12872 gösteriyor) — açıkça yanlış, düzeltilmeli. (3) Gist topluluk derlemesi, belirtilmiş lisansı yok.
 
 **Öneri:** bu listeyi hızlı başlangıç olarak kullan, ama tekrarüretilebilirlik için `lokasyon` ilçe adlarını bakımlı bir kaynağa karşı geokodla — [dilan01hall/turkiye-il-ilce-koordinatlari](https://huggingface.co/datasets/dilan01hall/turkiye-il-ilce-koordinatlari) veya [adilmustafayilmaz/turkiye-il-ilce-mahalle-verileri](https://github.com/adilmustafayilmaz/turkiye-il-ilce-mahalle-verileri) — ve kopyalanmış koordinata düşen her ilçeyi elle doğrula. Sonra hava çekmeden önce ERA5-Land ~11 km ızgarasına tekilleştir.
+
+**Bu projedeki uygulama (2026-08-21):** 47 lokasyonun tamamı `src/external/coords.py` içinde, reorganizasyon sonrası ilçeler dahil, Buca/Karşıyaka il-merkezi kopyaları düzeltilmiş halde. Ayrıntı: `docs/external-data.md`.
+
+## 12. EPİAŞ sızıntı taraması (2026-08-21)
+
+ASHRAE GEPIII'de public test setinin bir kısmı internetten kazınabiliyordu. Analog kontrol: EPİAŞ Şeffaflık Platformu Nisan–Temmuz 2026 için **trafo-gün** gerçekleşen tüketim yayımlamıyor. Yayımlanan tüketim **il × ay** (`/v1/consumption/data/consumption-quantity`) ve ulusal saatlik sistem yükü. Skorlanan birimle eşleşmediği için hedef sızıntısı yok. İl-aylık seri bu sürümde kullanılmadı.
+
